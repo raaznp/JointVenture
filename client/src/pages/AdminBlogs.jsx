@@ -14,7 +14,7 @@ const AdminBlogs = () => {
 
     const fetchBlogs = async () => {
         try {
-            const { data } = await axios.get('http://localhost:5000/api/blogs');
+            const { data } = await axios.get('/api/blogs');
             setBlogs(data);
         } catch (error) {
             console.error("Error fetching blogs", error);
@@ -28,7 +28,7 @@ const AdminBlogs = () => {
             const token = localStorage.getItem('token');
             const config = { headers: { Authorization: `Bearer ${token}` } };
             try {
-                await axios.delete(`http://localhost:5000/api/blogs/${id}`, config);
+                await axios.delete(`/api/blogs/${id}`, config);
                 setBlogs(blogs.filter(b => b._id !== id));
             } catch (error) {
                 console.error("Error deleting blog", error);

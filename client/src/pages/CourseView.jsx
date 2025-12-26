@@ -15,7 +15,7 @@ const CourseView = () => {
                 },
             };
             try {
-                const { data } = await axios.get(`http://localhost:5000/api/courses/${id}`, config);
+                const { data } = await axios.get(`/api/courses/${id}`, config);
                 setCourse(data);
             } catch (error) {
                 console.error(error);

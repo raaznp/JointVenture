@@ -24,7 +24,7 @@ const ModuleView = () => {
                 },
             };
             try {
-                const { data } = await axios.get(`http://localhost:5000/api/courses/${courseId}`, config);
+                const { data } = await axios.get(`/api/courses/${courseId}`, config);
                 const foundModule = data.modules.find(m => m._id === moduleId);
                 setModule(foundModule);
             } catch (error) {

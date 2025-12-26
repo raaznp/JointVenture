@@ -15,7 +15,7 @@ const Courses = () => {
                     Authorization: `Bearer ${token}`,
                 },
             };
-            const { data } = await axios.get('http://localhost:5000/api/courses', config);
+            const { data } = await axios.get('/api/courses', config);
             setCourses(data);
         };
         fetchCourses();

@@ -20,7 +20,7 @@ const Users = () => {
         const token = localStorage.getItem('token');
         const config = { headers: { Authorization: `Bearer ${token}` } };
         try {
-            const { data } = await axios.get('http://localhost:5000/api/users', config);
+            const { data } = await axios.get('/api/users', config);
             setUsers(data);
         } catch (error) {
             console.error("Error fetching users", error);
@@ -34,7 +34,7 @@ const Users = () => {
             const token = localStorage.getItem('token');
             const config = { headers: { Authorization: `Bearer ${token}` } };
             try {
-                await axios.delete(`http://localhost:5000/api/users/${id}`, config);
+                await axios.delete(`/api/users/${id}`, config);
                 setUsers(users.filter(u => u._id !== id));
             } catch (error) {
                 console.error("Error deleting user", error);
@@ -61,10 +61,10 @@ const Users = () => {
 
         try {
             if (modalMode === 'add') {
-                const { data } = await axios.post('http://localhost:5000/api/users', currentUser, config);
+                const { data } = await axios.post('/api/users', currentUser, config);
                 setUsers([...users, data]);
             } else {
-                const { data } = await axios.put(`http://localhost:5000/api/users/${currentUser._id}`, currentUser, config);
+                const { data } = await axios.put(`/api/users/${currentUser._id}`, currentUser, config);
                 setUsers(users.map(u => u._id === currentUser._id ? data : u));
             }
             setIsModalOpen(false);

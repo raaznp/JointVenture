@@ -28,7 +28,7 @@ const AdminBlogEdit = () => {
 
     const fetchBlog = async () => {
         try {
-            const { data } = await axios.get(`http://localhost:5000/api/blogs/${id}`);
+            const { data } = await axios.get(`/api/blogs/${id}`);
             setFormData(data);
         } catch (error) {
             console.error("Error fetching blog", error);
@@ -49,9 +49,9 @@ const AdminBlogEdit = () => {
         
         try {
             if (isEditMode) {
-                await axios.put(`http://localhost:5000/api/blogs/${id}`, formData, config);
+                await axios.put(`/api/blogs/${id}`, formData, config);
             } else {
-                await axios.post('http://localhost:5000/api/blogs', formData, config);
+                await axios.post('/api/blogs', formData, config);
             }
             navigate('/dashboard/blogs');
         } catch (error) {
