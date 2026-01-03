@@ -26,10 +26,10 @@ jobs:
             # Pull latest changes
             git pull origin main
 
-            # Create .env file (Hardfix for Prod)
+            # Create .env file (Securely from Secrets)
             echo "PORT=5000" > server/.env
-            echo "MONGO_URI=mongodb+srv://jointventure:0P2cY0he8CZ6p3WP@safe360demo.l1ablip.mongodb.net/jointventure?appName=Safe360Demo" >> server/.env
-            echo "JWT_SECRET=c1ed81fde4f14173b534f3c022559362d7732e188e458a4f4c4795294df9b962" >> server/.env
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> server/.env
+            echo "JWT_SECRET=${{ secrets.JWT_SECRET }}" >> server/.env
 
             # Install server dependencies
             cd server && npm install
