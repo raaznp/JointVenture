@@ -46,11 +46,11 @@ const Settings = () => {
         <div className="p-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-8">Settings</h1>
 
-            {/* Main Container - Flexbox Layout matching Safe360 */}
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden min-h-[500px] flex flex-col md:flex-row">
+            {/* Main Container - Flexbox Layout matching Safe360 but responsive sooner */}
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden min-h-[500px] flex flex-col sm:flex-row">
                 
                 {/* Settings Sidebar - Fixed width on desktop */}
-                <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-gray-200 bg-gray-50 flex-shrink-0">
+                <div className="w-full sm:w-64 border-b sm:border-b-0 sm:border-r border-gray-200 bg-gray-50 flex-shrink-0">
                     <nav className="p-4 space-y-2">
                         <button
                             onClick={() => setActiveTab('general')}
@@ -89,7 +89,7 @@ const Settings = () => {
                 </div>
 
                 {/* Settings Content - Takes remaining space */}
-                <div className="flex-1 p-8">
+                <div className="flex-1 p-8 min-w-0">
                     {activeTab === 'general' && (
                         <div className="max-w-xl space-y-6">
                             <h2 className="text-xl font-semibold text-gray-900 mb-4">General Settings</h2>
