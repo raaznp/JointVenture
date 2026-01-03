@@ -35,6 +35,7 @@ const Sidebar = () => {
         ] : []),
 
         { name: 'Settings', path: '/dashboard/settings', icon: Settings },
+        { name: 'Profile', path: '/dashboard/profile', icon: Users }, // Using Users icon as generic profile for now
     ];
 
     return (

@@ -33,11 +33,14 @@ import CertificateView from './pages/CertificateView';
 import PublicVerification from './pages/PublicVerification';
 import Media from './pages/Media';
 import Files from './pages/Files';
+import Profile from './pages/Profile';
+import { ToastProvider } from './context/ToastContext';
 
 function App() {
   return (
     <Router>
-      <AuthProvider>
+      <ToastProvider>
+        <AuthProvider>
         <Routes>
           {/* Public Routes */}
           <Route path="/" element={<PublicLayout><Home /></PublicLayout>} />
@@ -204,10 +207,22 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="/dashboard/profile"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Profile />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
           <Route path="/certificates/:id" element={<CertificateView />} />
           <Route path="/verify" element={<PublicLayout><PublicVerification /></PublicLayout>} />
         </Routes>
-      </AuthProvider>
+
+        </AuthProvider>
+      </ToastProvider>
     </Router>
   );
 }
