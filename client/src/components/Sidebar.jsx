@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import AuthContext from '../context/AuthContext';
-import { LayoutDashboard, BookOpen, Users, Settings, LogOut, Mail, HelpCircle, Award } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Users, Settings, LogOut, Mail, HelpCircle, Award, Image as ImageIcon, FileText } from 'lucide-react';
 import jvLogo from '../assets/jv-logo.png';
 
 const Sidebar = () => {
@@ -14,14 +14,26 @@ const Sidebar = () => {
         { name: 'Dashboard', path: '/dashboard', icon: LayoutDashboard },
         { name: 'Courses', path: '/dashboard/courses', icon: BookOpen },
         { name: 'Certifications', path: '/dashboard/certificates', icon: Award },
+        
+        // Admin Only
         ...(user?.role === 'admin' ? [
             { name: 'Users', path: '/dashboard/users', icon: Users },
-            { name: 'Blogs', path: '/dashboard/blogs', icon: BookOpen },
             { name: 'Messages', path: '/dashboard/messages', icon: Mail },
             { name: 'Support', path: '/dashboard/admin/support', icon: HelpCircle }
-        ] : [
-            { name: 'Support', path: '/dashboard/support', icon: HelpCircle }
-        ]),
+        ] : []),
+
+        // Admin & Editor (Content Management)
+        ...((user?.role === 'admin' || user?.role === 'editor') ? [
+            { name: 'Blogs', path: '/dashboard/blogs', icon: BookOpen },
+            { name: 'Media', path: '/dashboard/media', icon: ImageIcon },
+            { name: 'Files', path: '/dashboard/files', icon: FileText },
+        ] : []),
+
+        // Staff/User Support (if not admin)
+        ...(user?.role !== 'admin' ? [
+             { name: 'Support', path: '/dashboard/support', icon: HelpCircle }
+        ] : []),
+
         { name: 'Settings', path: '/dashboard/settings', icon: Settings },
     ];
 

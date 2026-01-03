@@ -30,6 +30,9 @@ app.use('/api/blogs', require('./routes/blogs'));
 app.use('/api/team', require('./routes/team'));
 app.use('/api/pages', require('./routes/pages'));
 app.use('/api/contact', require('./routes/contact'));
+app.use('/api/media', require('./routes/media'));
+app.use('/api/files', require('./routes/files'));
+app.use('/uploads', express.static('uploads'));
 app.use('/api/dev', require('./routes/dev'));
 
 app.get('/', (req, res) => {

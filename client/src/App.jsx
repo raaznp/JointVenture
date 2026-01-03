@@ -31,6 +31,8 @@ import SupportManagement from './pages/SupportManagement'; // For Admin
 import Certifications from './pages/Certifications';
 import CertificateView from './pages/CertificateView';
 import PublicVerification from './pages/PublicVerification';
+import Media from './pages/Media';
+import Files from './pages/Files';
 
 function App() {
   return (
@@ -138,6 +140,26 @@ function App() {
               <ProtectedRoute>
                 <DashboardLayout>
                   <AdminBlogs />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/media"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Media />
+                </DashboardLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/dashboard/files"
+            element={
+              <ProtectedRoute>
+                <DashboardLayout>
+                  <Files />
                 </DashboardLayout>
               </ProtectedRoute>
             }
