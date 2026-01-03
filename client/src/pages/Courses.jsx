@@ -27,9 +27,13 @@ const Courses = () => {
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
                 {courses.map((course) => (
                     <div key={course._id} className="bg-white overflow-hidden shadow rounded-lg">
-                        <img className="h-48 w-full object-cover" src={course.thumbnail} alt={course.title} />
+                        <Link to={`/dashboard/course/${course._id}`}>
+                            <img className="h-48 w-full object-cover cursor-pointer hover:opacity-90 transition-opacity" src={course.thumbnail} alt={course.title} />
+                        </Link>
                         <div className="px-4 py-5 sm:p-6">
-                            <h3 className="text-lg leading-6 font-medium text-gray-900">{course.title}</h3>
+                            <Link to={`/dashboard/course/${course._id}`}>
+                                <h3 className="text-lg leading-6 font-medium text-gray-900 hover:text-blue-600 transition-colors cursor-pointer">{course.title}</h3>
+                            </Link>
 
                             {/* Progress Bar */}
                             <div className="mt-2 mb-2">
