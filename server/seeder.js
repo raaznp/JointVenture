@@ -20,6 +20,7 @@ const seedData = async () => {
 
         // Seed Users
         const users = [
+            /* 
             {
                 username: 'admin',
                 fullName: 'Super Admin',
@@ -27,7 +28,8 @@ const seedData = async () => {
                 password: 'password123',
                 role: 'admin',
                 bio: 'Managing the entire platform.'
-            },
+            }, 
+            */
             {
                 username: 'editor_jane',
                 fullName: 'Jane Editor',
@@ -47,7 +49,7 @@ const seedData = async () => {
             {
                 username: 'jointventure',
                 fullName: 'Joint Venture Admin',
-                email: 'jv@example.com',
+                email: 'admin@example.com', // Updated as requested
                 password: 'password123',
                 role: 'admin',
                 bio: 'System Administrator'
