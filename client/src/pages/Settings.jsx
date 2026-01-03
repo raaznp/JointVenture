@@ -117,7 +117,6 @@ const Settings = () => {
                             </div>
                             
                             <div className="flex items-center justify-between pt-4">
-                                /* ... existing content ... */
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900">Maintenance Mode</h3>
                                     <p className="text-xs text-gray-500">Put the site in maintenance mode</p>
