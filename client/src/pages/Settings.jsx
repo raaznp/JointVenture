@@ -46,10 +46,10 @@ const Settings = () => {
         <div className="p-6">
             <h1 className="text-3xl font-bold text-gray-900 mb-8">Settings</h1>
 
-            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden min-h-[500px] grid grid-cols-1 md:grid-cols-[16rem_1fr]">
+            <div className="bg-white rounded-xl border border-gray-200 shadow-sm overflow-hidden min-h-[500px] flex flex-col md:flex-row">
                 
                 {/* Settings Sidebar */}
-                <div className="border-b md:border-b-0 md:border-r border-gray-200 bg-gray-50">
+                <div className="w-full md:w-64 border-b md:border-b-0 md:border-r border-gray-200 bg-gray-50 flex-shrink-0">
                     <nav className="p-4 space-y-2">
                         <button
                             onClick={() => setActiveTab('general')}
@@ -88,7 +88,7 @@ const Settings = () => {
                 </div>
 
                 {/* Settings Content */}
-                <div className="p-8">
+                <div className="flex-1 p-8">
                     {activeTab === 'general' && (
                         <div className="max-w-xl space-y-6">
                             <h2 className="text-xl font-semibold text-gray-900 mb-4">General Settings</h2>
@@ -117,6 +117,7 @@ const Settings = () => {
                             </div>
                             
                             <div className="flex items-center justify-between pt-4">
+                                /* ... existing content ... */
                                 <div>
                                     <h3 className="text-sm font-medium text-gray-900">Maintenance Mode</h3>
                                     <p className="text-xs text-gray-500">Put the site in maintenance mode</p>
