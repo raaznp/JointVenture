@@ -28,6 +28,9 @@ jobs:
 
             # Install server dependencies
             cd server && npm install
+            
+            # Seed Database (Ensure Admin is updated)
+            node seeder.js
 
             # Install client dependencies and build
             cd ../client && npm install && npm run build
