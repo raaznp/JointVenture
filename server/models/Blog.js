@@ -2,12 +2,33 @@ const mongoose = require('mongoose');
 
 const blogSchema = new mongoose.Schema({
     title: { type: String, required: true },
-    excerpt: { type: String, required: true },
-    author: { type: String, required: true },
-    date: { type: String, required: true }, // Keeping as string for simplicity to match frontend 'December 15, 2025'
-    image: { type: String, required: true },
-    category: { type: String, required: true },
-    content: { type: String }, // HTML content
+    slug: { type: String, required: true, unique: true },
+    metaDescription: { type: String },
+    content: { type: String, required: true },
+    author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+    categories: { type: [String], default: [] },
+    tags: { type: [String], default: [] },
+    image: { type: String, default: '' }, // Featured Image URL
+    imageAlt: { type: String, default: '' }, // Alt text for the image
+    
+    // Workflow Fields
+    status: { 
+        type: String, 
+        enum: ['draft', 'pending', 'published', 'rejected'], 
+        default: 'draft' 
+    },
+    approvalLog: [{
+        status: { type: String },
+        by: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+        date: { type: Date, default: Date.now },
+        comment: { type: String }
+    }],
+
+    published: { type: Boolean, default: false }, // Dependent on status='published'
+    visibility: { type: String, enum: ['public', 'private'], default: 'public' },
+    publishedAt: { type: Date },
+    readingTime: { type: Number, default: 0 }, // in minutes
+    commentsEnabled: { type: Boolean, default: true }
 }, {
     timestamps: true,
 });

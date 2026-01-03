@@ -38,4 +38,20 @@ const admin = (req, res, next) => {
     }
 };
 
-module.exports = { protect, admin };
+const editor = (req, res, next) => {
+    if (req.user && (req.user.role === 'editor' || req.user.role === 'admin')) {
+        next();
+    } else {
+        res.status(401).json({ message: 'Not authorized as an editor' });
+    }
+};
+
+const staff = (req, res, next) => {
+    if (req.user && (req.user.role === 'staff' || req.user.role === 'editor' || req.user.role === 'admin')) {
+        next();
+    } else {
+        res.status(401).json({ message: 'Not authorized as staff' });
+    }
+};
+
+module.exports = { protect, admin, editor, staff };
