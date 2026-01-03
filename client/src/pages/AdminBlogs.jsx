@@ -53,50 +53,95 @@ const AdminBlogs = () => {
             </div>
 
             <div className="bg-white shadow overflow-hidden sm:rounded-lg">
-                <ul className="divide-y divide-gray-200">
-                    {blogs.map((blog) => (
-                        <li key={blog._id} className="px-4 py-4 sm:px-6 hover:bg-gray-50 flex flex-col sm:flex-row sm:items-center sm:justify-between">
-                             <div className="flex items-center mb-4 sm:mb-0">
-                                <img 
-                                    src={blog.image} 
-                                    alt={blog.title} 
-                                    className="h-16 w-16 object-cover rounded-lg mr-4"
-                                />
-                                <div>
-                                    <h3 className="text-lg font-medium text-blue-600">{blog.title}</h3>
-                                    <div className="flex items-center text-sm text-gray-500 mt-1">
-                                        <Calendar className="h-4 w-4 mr-1" />
-                                        {blog.date}
-                                        <span className="mx-2">•</span>
-                                        <span className="bg-gray-100 px-2 py-0.5 rounded text-xs">
-                                            {blog.category}
-                                        </span>
+                <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50">
+                        <tr>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Title
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Author
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Category
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Status
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Date
+                            </th>
+                            <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Actions
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="bg-white divide-y divide-gray-200">
+                        {blogs.map((blog) => (
+                            <tr key={blog._id} className="hover:bg-gray-50">
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 h-10 w-10">
+                                            <img className="h-10 w-10 rounded-lg object-cover" src={blog.image} alt="" />
+                                        </div>
+                                        <div className="ml-4">
+                                            <div className="text-sm font-medium text-gray-900 truncate max-w-xs" title={blog.title}>{blog.title}</div>
+                                            <div className="text-xs text-gray-500 truncate max-w-xs">{blog.slug}</div>
+                                        </div>
                                     </div>
-                                </div>
-                             </div>
-
-                             <div className="flex space-x-3">
-                                <Link
-                                    to={`/dashboard/blogs/edit/${blog._id}`}
-                                    className="text-indigo-600 hover:text-indigo-900 border border-indigo-200 px-3 py-1 rounded-md hover:bg-indigo-50 transition-colors flex items-center"
-                                >
-                                    <Edit className="h-4 w-4 mr-1" /> Edit
-                                </Link>
-                                <button
-                                    onClick={() => deleteBlog(blog._id)}
-                                    className="text-red-600 hover:text-red-900 border border-red-200 px-3 py-1 rounded-md hover:bg-red-50 transition-colors flex items-center"
-                                >
-                                    <Trash2 className="h-4 w-4 mr-1" /> Delete
-                                </button>
-                             </div>
-                        </li>
-                    ))}
-                    {blogs.length === 0 && (
-                        <li className="px-4 py-8 text-center text-gray-500">
-                            No blog posts found. Create one to get started!
-                        </li>
-                    )}
-                </ul>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <div className="flex items-center">
+                                        <div className="flex-shrink-0 h-6 w-6 rounded-full bg-gray-200 flex items-center justify-center text-xs font-medium text-gray-500">
+                                            {blog.author?.fullName?.charAt(0) || 'U'}
+                                        </div>
+                                        <div className="ml-2 text-sm text-gray-900">{blog.author?.fullName || 'Unknown'}</div>
+                                    </div>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <span className="text-sm text-gray-500 italic">
+                                        {Array.isArray(blog.categories) ? blog.categories.join(', ') : blog.category || 'Uncategorized'}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap">
+                                    <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
+                                        blog.status === 'published' ? 'bg-green-100 text-green-800' : 
+                                        blog.status === 'pending' ? 'bg-yellow-100 text-yellow-800' : 
+                                        'bg-gray-100 text-gray-800'
+                                    }`}>
+                                        {blog.status || 'draft'}
+                                    </span>
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                                    {new Date(blog.createdAt || blog.date).toLocaleDateString()}
+                                </td>
+                                <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                                    <div className="flex justify-end space-x-3">
+                                        <Link
+                                            to={`/dashboard/blogs/edit/${blog._id}`}
+                                            className="text-indigo-600 hover:text-indigo-900"
+                                            title="Edit"
+                                        >
+                                            <Edit className="h-4 w-4" />
+                                        </Link>
+                                        <button
+                                            onClick={() => deleteBlog(blog._id)}
+                                            className="text-red-600 hover:text-red-900"
+                                            title="Delete"
+                                        >
+                                            <Trash2 className="h-4 w-4" />
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </table>
+                {blogs.length === 0 && (
+                    <div className="px-6 py-12 text-center text-gray-500">
+                        No blog posts found. Create one to get started!
+                    </div>
+                )}
             </div>
         </div>
     );
