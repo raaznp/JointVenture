@@ -27,6 +27,9 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/courses', require('./routes/courses'));
 app.use('/api/users', require('./routes/users'));
 app.use('/api/blogs', require('./routes/blogs'));
+app.use('/api/team', require('./routes/team'));
+app.use('/api/pages', require('./routes/pages'));
+app.use('/api/contact', require('./routes/contact'));
 
 app.get('/', (req, res) => {
     res.send('API is running...');
