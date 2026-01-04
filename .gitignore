@@ -35,7 +35,6 @@ yarn-error.log*
 # Generated files
 
 # Generated files
-client/screenshots
 logs
 *.log
 pnpm-debug.log*
