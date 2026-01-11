@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { User, Save, GraduationCap, Briefcase, Plus, Trash, MapPin, Phone, Github, Linkedin, Twitter, Globe, Camera } from 'lucide-react';
+import { User, Save, GraduationCap, Briefcase, Plus, Trash, MapPin, Phone, Github, Linkedin, Twitter, Globe, Camera, Flame } from 'lucide-react';
 import MediaLibraryModal from '../components/MediaLibraryModal';
 import { useToast } from '../context/ToastContext';
 
@@ -13,6 +13,7 @@ const Profile = () => {
         username: '',
         email: '',
         role: '',
+        streak: 0,
         fullName: '',
         phone: '',
         address: '',
@@ -46,6 +47,7 @@ const Profile = () => {
             
             setProfile({
                ...data,
+               streak: data.streak || 0,
                avatar: data.avatar || '',
                socials: {
                    linkedin: data.socials?.linkedin || '',
@@ -200,6 +202,10 @@ const Profile = () => {
                                     >
                                         <Camera className="w-8 h-8 text-white" />
                                     </button>
+                                </div>
+                                <div className="mt-4 flex items-center text-orange-500 bg-orange-50 px-3 py-1 rounded-full border border-orange-200">
+                                    <Flame className="w-4 h-4 mr-1 fill-orange-500" />
+                                    <span className="font-bold">{profile.streak} Day Streak</span>
                                 </div>
                             </div>
 

@@ -26,6 +26,8 @@ const userSchema = new mongoose.Schema({
     address: { type: String, default: '' },
     bio: { type: String, default: '' },
     avatar: { type: String, default: '' },
+    streak: { type: Number, default: 0 },
+    lastLogin: { type: Date },
     
     // Social Media
     socials: {

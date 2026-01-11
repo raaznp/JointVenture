@@ -34,6 +34,7 @@ app.use('/api/media', require('./routes/media'));
 app.use('/api/files', require('./routes/files'));
 app.use('/uploads', express.static('uploads'));
 app.use('/api/dev', require('./routes/dev'));
+app.use('/api/certificates', require('./routes/certificates'));
 
 app.get('/', (req, res) => {
     res.send('API is running...');

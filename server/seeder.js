@@ -126,21 +126,221 @@ const seedData = async () => {
         console.log('Blogs Seeded!');
 
         // Seed Courses (Kept mostly same, just ensuring no ref errors if any)
+        // Seed Courses
         const courses = [
             {
                 title: 'Warehouse Equipment Familiarisation',
-                description: 'Learn about the various equipment used in a modern warehouse.',
+                description: 'Comprehensive training on modern warehouse machinery and safety standards. This is our core curriculum for all logistics personnel.',
                 thumbnail: 'https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?auto=format&fit=crop&w=800&q=80',
                 modules: [
                     {
-                        title: 'Forklift Safety',
-                        description: 'Introduction to Forklift safety and operation.',
+                        title: 'Entrance & Security Checkpoint',
+                        description: 'Familiarize yourself with the security protocols at the facility entrance.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/leadenhall_market_02.jpg', // Placeholder for entrance
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: -5, yaw: 180, text: 'ID Badge Reader', type: 'info' },
+                            { pitch: 0, yaw: 0, text: 'Visitor Logbook', type: 'info' },
+                            { pitch: 10, yaw: 90, text: 'PPE Signage', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'Main Loading Dock',
+                        description: 'Operations at the main loading dock.',
                         type: '360',
                         content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/empty_warehouse_01.jpg',
                         isLocked: false,
                         hotspots: [
-                            { pitch: -5, yaw: 180, text: 'Main Aisle', type: 'info' },
-                            { pitch: 10, yaw: 0, text: 'Roof Structure', type: 'info' }
+                            { pitch: -10, yaw: 0, text: 'Dock Leveler', type: 'info' },
+                            { pitch: -15, yaw: 45, text: 'Wheel Chocks (Safety)', type: 'info' },
+                            { pitch: 20, yaw: 0, text: 'Overhead Door Controls', type: 'info' }
+                        ]
+                    },
+                     {
+                        title: 'Forklift Charging Station',
+                        description: 'Battery maintenance and safety.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/aircraft_workshop_01.jpg', // Industrial workshop vibe
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: 0, yaw: 180, text: 'Battery Charger', type: 'info' },
+                            { pitch: 5, yaw: 90, text: 'Eye Wash Station', type: 'info' },
+                            { pitch: -10, yaw: -45, text: 'Acid Spill Kit', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'High-Bay Storage Aisles',
+                        description: 'Navigation and stacking rules in high-bay areas.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/empty_warehouse_01.jpg', // Reusing warehouse
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: 15, yaw: 0, text: 'Rack Load Labels', type: 'info' },
+                            { pitch: 0, yaw: 180, text: 'Aisle Mirrors', type: 'info' },
+                            { pitch: -5, yaw: 45, text: 'Pallet Stacking Limits', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'Packing & Sortation Area',
+                        description: 'Conveyor belts and manual packing stations.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/production_hall_01.jpg',
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: 0, yaw: 0, text: 'Emergency Stop Button', type: 'info' },
+                            { pitch: -10, yaw: 90, text: 'Barcode Scanner', type: 'info' },
+                            { pitch: -15, yaw: 180, text: 'Anti-Fatigue Mat', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'Cold Storage / Freezer',
+                        description: 'Operations in temperature-controlled zones.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/carpentry_shop_01.jpg', // Placeholder for cold room
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: 10, yaw: 0, text: 'Temperature Gauge', type: 'info' },
+                            { pitch: 20, yaw: 180, text: 'Thermal Curtain', type: 'info' },
+                            { pitch: -10, yaw: 45, text: 'Ice Buildup Check', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'Hazardous Materials Cage',
+                        description: 'Restricted storage for chemicals and flammables.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/large_corridor.jpg',
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: 5, yaw: 0, text: 'NFPA Diamond Placard', type: 'info' },
+                            { pitch: 25, yaw: 0, text: 'Ventilation Intake', type: 'info' },
+                            { pitch: 0, yaw: 180, text: 'Locked Access Gate', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'Maintenance Workshop',
+                        description: 'Tools, repairs, and lockout/tagout procedures.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/machine_shop_01.jpg',
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: 0, yaw: 0, text: 'Lockout/Tagout Station', type: 'info' },
+                            { pitch: -5, yaw: 90, text: 'Grinder Guard', type: 'info' },
+                            { pitch: -10, yaw: -90, text: 'Fire Extinguisher', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'Admin & Dispatch Office',
+                        description: 'Inventory management and communication hub.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/autoshop_01.jpg', // Office/Shop vibe
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: 0, yaw: 0, text: 'Radio Dispatch', type: 'info' },
+                            { pitch: -5, yaw: 180, text: 'Inventory Terminal', type: 'info' },
+                            { pitch: 10, yaw: 90, text: 'Evacuation Map', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'Waste Management Zone',
+                        description: 'Recycling, compaction, and biohazard disposal.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/factory_1k.jpg', // Placeholder
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: 0, yaw: 0, text: 'Cardboard Baler', type: 'info' },
+                            { pitch: -10, yaw: 90, text: 'Color-Coded Bins', type: 'info' },
+                            { pitch: -5, yaw: 180, text: 'Biohazard Disposal', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'Emergency Assembly Point',
+                        description: 'Outdoor assembly area procedures.',
+                        type: '360',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/syferfontein_06_puresky.jpg', // Outdoor field
+                        isLocked: false,
+                        hotspots: [
+                            { pitch: 0, yaw: 0, text: 'Muster Point Sign', type: 'info' },
+                            { pitch: -5, yaw: 45, text: 'First Aid Kit (Mobile)', type: 'info' },
+                            { pitch: 0, yaw: -45, text: 'Headcount Clipboard', type: 'info' }
+                        ]
+                    },
+                    {
+                        title: 'Final Certification Exam',
+                        description: 'Comprehensive assessment covering all warehouse zones.',
+                        type: 'quiz',
+                        questions: [
+                            { question: 'What must be scanned at the security checkpoint?', options: ['ID Badge', 'Drivers License', 'Lunch Box', 'None of the above'], correct: 0 },
+                            { question: 'Where should visitors sign in?', options: ['Loading Dock', 'Visitor Logbook', 'Cafeteria', 'Security Guard Personal Notebook'], correct: 1 },
+                            { question: 'What signage is mandatory at the entrance?', options: ['Welcome', 'No Smoking', 'PPE Required', 'Open Hours'], correct: 2 },
+                            { question: 'What device prevents trucks from moving at the dock?', options: ['Wheel Chocks', 'Red Light', 'Yield Sign', 'Cone'], correct: 0 },
+                            { question: 'Where are the overhead door controls located?', options: ['Outside', 'Next to the door', 'In the office', 'On the forklift'], correct: 1 },
+                            { question: 'What is the first step in connecting a battery charger?', options: ['Turn it on', 'Check for water', 'Wear gloves & Connect properly', 'Call for help'], correct: 2 },
+                            { question: 'Where is the Eye Wash Station typically found?', options: ['Restroom', 'Charging Station', 'Office', 'Loading Dock'], correct: 1 },
+                            { question: 'What should be used for an acid spill?', options: ['Water Hose', 'Paper Towels', 'Acid Spill Kit', 'Broom'], correct: 2 },
+                            { question: 'Where do you find rack weight limits?', options: ['On the floor', 'Rack Load Labels', 'Ask a manager', 'Guess'], correct: 1 },
+                            { question: 'How can you see around blind spots in aisles?', options: ['Yell loudly', 'Use Aisle Mirrors', 'Walk fast', 'Honk horn only'], correct: 1 },
+                            { question: 'What ensures pallets are stacked safely?', options: ['Stacking Limits', 'Unlimited height', 'Leaning them', 'Using tape'], correct: 0 },
+                            { question: 'What button halts the conveyor belt immediately?', options: ['Pause', 'Slow Down', 'Emergency Stop', 'Off'], correct: 2 },
+                            { question: 'What is used to track goods at packing stations?', options: ['Pen and Paper', 'Barcode Scanner', 'Camera', 'Memory'], correct: 1 },
+                            { question: 'What reduces fatigue at standing stations?', options: ['Chair', 'Anti-Fatigue Mat', 'Music', 'Breaks only'], correct: 1 },
+                            { question: 'What instrument monitors cold storage temp?', options: ['Thermometer', 'Temperature Gauge', 'Phone App', 'Hand feel'], correct: 1 },
+                            { question: 'What helps retain cold air in freezers?', options: ['Wood Door', 'Thermal Curtain', 'Fan', 'Heater'], correct: 1 },
+                            { question: 'What indicates a chemical hazard?', options: ['Smiley Face', 'NFPA Diamond', 'Red Circle', 'Blue Square'], correct: 1 },
+                            { question: 'What prevents unauthorized access to HazMat?', options: ['Sign', 'Locked Gate', 'Curtain', 'Camera'], correct: 1 },
+                            { question: 'What safety procedure isolates energy during repair?', options: ['Unplugging', 'Lockout/Tagout', 'Turning off switch', 'Tape'], correct: 1 },
+                            { question: 'What protects you from grinder debris?', options: ['Sunglasses', 'Grinder Guard', 'Nothing', 'Hat'], correct: 1 },
+                            { question: 'Which extinguisher is for general fires?', options: ['Class A', 'Class B/C', 'Water', 'Sand'], correct: 1 },
+                            { question: 'What is used to coordinate emergency communication?', options: ['Yelling', 'Radio Dispatch', 'Whistle', 'Running'], correct: 1 },
+                            { question: 'Where do you throw cardboard waste?', options: ['Trash Can', 'Cardboard Baler', 'Floor', 'River'], correct: 1 },
+                            { question: 'Where do staff gather during an evacuation?', options: ['Cafeteria', 'Restroom', 'Muster Point / Assembly Area', 'Car'], correct: 2 },
+                            { question: 'What is used to verify all staff are safe?', options: ['Phone Call', 'Headcount Clipboard', 'Guessing', 'Looking around'], correct: 1 }
+                        ],
+                        isLocked: true
+                    }
+                ]
+            },
+            {
+                title: 'Safety Protocols 101',
+                description: 'Essential safety guidelines for all staff. Covers fire safety, evacuation, and first aid basics.',
+                thumbnail: 'https://images.unsplash.com/photo-1517048676732-d65bc937f952?auto=format&fit=crop&w=800&q=80',
+                modules: [
+                    {
+                        title: 'Fire Safety Basics',
+                        description: 'Understanding fire classes and extinguisher types.',
+                        type: 'video',
+                        content: 'https://www.youtube.com/embed/dQw4w9WgXcQ',
+                        isLocked: false
+                    },
+                    {
+                        title: 'Emergency Evacuation',
+                        description: 'Procedures for safe and orderly evacuation.',
+                        type: 'text',
+                        content: 'Proceed to the nearest exit immediately upon hearing the alarm.',
+                        isLocked: false
+                    }
+                ]
+            },
+               {
+                title: 'Security Guard 101',
+                description: 'Foundational training for security personnel. Access control, patrols, and incident reporting.',
+                thumbnail: 'https://images.unsplash.com/photo-1555529733-0e670560f7e1?auto=format&fit=crop&w=800&q=80',
+                modules: [
+                    {
+                        title: 'Access Control',
+                        description: 'Verifying credentials and managing visitors.',
+                        type: 'text',
+                        content: 'All visitors must sign in at the front desk.',
+                        isLocked: false
+                    },
+                    {
+                        title: 'Patrol Strategies',
+                        description: 'Effective perimeter and internal patrol techniques.',
+                        type: '360',
+                         content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/leadenhall_market_02.jpg',
+                        isLocked: false,
+                         hotspots: [
+                            { pitch: 0, yaw: 0, text: 'Entry Point', type: 'info' }
                         ]
                     }
                 ]
@@ -166,19 +366,21 @@ const seedData = async () => {
         // Seed Certificates
         // Using the 'demo_user' created above
         const learner = createdUsers.find(u => u.username === 'demo_user');
-        const demoCourse = createdCourses[0]; 
+        
+        // Find 'Safety Protocols 101'
+        const safetyCourse = createdCourses.find(c => c.title === 'Safety Protocols 101');
 
-        if (learner && demoCourse) {
+        if (learner && safetyCourse) {
             const certificates = [
                 {
                     user: learner._id,
-                    course: demoCourse._id,
+                    course: safetyCourse._id,
                     code: 'JV-CERT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
                     issueDate: new Date()
                 }
             ];
             await Certificate.insertMany(certificates);
-            console.log('Certificates Seeded!');
+            console.log('Certificates Seeded for Safety Protocols 101!');
         }
 
         process.exit();
