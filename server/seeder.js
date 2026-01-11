@@ -12,11 +12,15 @@ const seedData = async () => {
         await mongoose.connect(process.env.MONGO_URI);
         console.log('MongoDB Connected');
 
-        await Course.deleteMany({});
-        await User.deleteMany({});
-        await Job.deleteMany({});
-        await Blog.deleteMany({});
-        await Certificate.deleteMany({});
+        // NOTE: We are NOT deleting all data blindly anymore to preserve user modifications.
+        // await User.deleteMany({}); 
+        // await Job.deleteMany({});
+        // await Blog.deleteMany({});
+        // await Certificate.deleteMany({});
+        
+        // However, for Course Content, we often want the latest structure.
+        // Strategy: Update existing courses or insert if missing.
+        // For development simplicity requested by user, we will focus on updating specific seeded content.
 
         // Seed Users
         const users = [
@@ -49,7 +53,7 @@ const seedData = async () => {
             {
                 username: 'jointventure',
                 fullName: 'Joint Venture Admin',
-                email: 'admin@example.com', // Updated as requested
+                email: 'admin@example.com', 
                 password: 'password123',
                 role: 'admin',
                 bio: 'System Administrator'
@@ -66,10 +70,24 @@ const seedData = async () => {
 
         const createdUsers = [];
         for (const user of users) {
-             const createdUser = await User.create(user);
-             createdUsers.push(createdUser);
+             // Check if user exists
+             let userDoc = await User.findOne({ email: user.email });
+             
+             if (userDoc) {
+                 // REPAIR: Reset password to trigger hashing (fix for plain text issue)
+                 userDoc.password = 'password123';
+                 // Preserve other fields if needed, but ensure role is correct for seed users
+                 userDoc.role = user.role;
+                 await userDoc.save(); 
+                 console.log(`User ${user.username} updated (password re-hashed).`);
+                 createdUsers.push(userDoc);
+             } else {
+                 userDoc = await User.create(user);
+                 console.log(`User ${user.username} created.`);
+                 createdUsers.push(userDoc);
+             }
         }
-        console.log('Users Seeded!');
+        console.log('Users Sync Complete!');
 
         // Get IDs
         const adminUser = createdUsers.find(u => u.role === 'admin');
@@ -122,8 +140,17 @@ const seedData = async () => {
             }
         ];
         
-        await Blog.insertMany(blogs);
-        console.log('Blogs Seeded!');
+        for (const blog of blogs) {
+            const existingBlog = await Blog.findOne({ slug: blog.slug });
+            if (!existingBlog) {
+                await Blog.create(blog);
+                console.log(`Blog '${blog.title}' created.`);
+            } else {
+                console.log(`Blog '${blog.title}' already exists.`);
+            }
+        }
+        // await Blog.insertMany(blogs);
+        console.log('Blogs Sync Complete!');
 
         // Seed Courses (Kept mostly same, just ensuring no ref errors if any)
         // Seed Courses
@@ -347,8 +374,21 @@ const seedData = async () => {
             }
         ];
 
-        const createdCourses = await Course.insertMany(courses); // Capture for certs
-        console.log('Courses Seeded!');
+        // Seed Courses - Upsert Logic
+        // We delete the seeded courses first to ensure fresh content structure, but try to preserve other ID links if possible.
+        // Actually, simplest is to finding by title and updating.
+        
+        const createdCourses = [];
+        for (const courseData of courses) {
+            // Delete existing version of this specific course to allow clean rewrite of modules (hard to sync nested arrays)
+            await Course.deleteOne({ title: courseData.title });
+            
+            const newCourse = await Course.create(courseData);
+            createdCourses.push(newCourse);
+            console.log(`Course '${courseData.title}' updated/seeded.`);
+        }
+        // const createdCourses = await Course.insertMany(courses); // OLD
+        console.log('Courses Content Updated!');
 
         // Seed Jobs
         const jobs = [
@@ -360,27 +400,46 @@ const seedData = async () => {
                 description: 'We are looking for an experienced Logistics Coordinator...'
             }
         ];
-        await Job.insertMany(jobs);
-        console.log('Jobs Seeded!');
+        for (const job of jobs) {
+            const existingJob = await Job.findOne({ title: job.title, department: job.department });
+            if (!existingJob) {
+                await Job.create(job);
+                console.log(`Job '${job.title}' created.`);
+            } else {
+                console.log(`Job '${job.title}' already exists.`);
+            }
+        }
+        // await Job.insertMany(jobs);
+        console.log('Jobs Sync Complete!');
 
         // Seed Certificates
         // Using the 'demo_user' created above
         const learner = createdUsers.find(u => u.username === 'demo_user');
         
         // Find 'Safety Protocols 101'
-        const safetyCourse = createdCourses.find(c => c.title === 'Safety Protocols 101');
+        // createdCourses now contains the updated/seeded courses (from local variable)
+        // If course wasn't recreated (e.g. error), we might need to find it by title
+        let safetyCourse = createdCourses.find(c => c.title === 'Safety Protocols 101');
+        if (!safetyCourse) {
+           safetyCourse = await Course.findOne({ title: 'Safety Protocols 101' });
+        }
 
         if (learner && safetyCourse) {
-            const certificates = [
-                {
-                    user: learner._id,
-                    course: safetyCourse._id,
-                    code: 'JV-CERT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
-                    issueDate: new Date()
-                }
-            ];
-            await Certificate.insertMany(certificates);
-            console.log('Certificates Seeded for Safety Protocols 101!');
+             const existingCert = await Certificate.findOne({ user: learner._id, course: safetyCourse._id });
+             if (!existingCert) {
+                const certificates = [
+                    {
+                        user: learner._id,
+                        course: safetyCourse._id,
+                        code: 'JV-CERT-' + Math.random().toString(36).substr(2, 9).toUpperCase(),
+                        issueDate: new Date()
+                    }
+                ];
+                await Certificate.insertMany(certificates);
+                console.log('Certificates Seeded for Safety Protocols 101!');
+             } else {
+                 console.log('Certificate for Safety Protocols 101 already exists.');
+             }
         }
 
         process.exit();
