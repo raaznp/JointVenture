@@ -28,44 +28,48 @@ router.post('/login', async (req, res) => {
     const user = await User.findOne({ email });
 
     if (user && (await user.matchPassword(password))) {
-        // Streak Logic
-        const today = new Date();
-        const lastLogin = user.lastLogin ? new Date(user.lastLogin) : null;
-        
-        let newStreak = user.streak || 0;
+        // Streak Logic - Wrapped in try/catch to prevent blocking login
+        try {
+            const today = new Date();
+            const lastLogin = user.lastLogin ? new Date(user.lastLogin) : null;
+            
+            let newStreak = user.streak || 0;
 
-        if (lastLogin) {
-            const diffTime = Math.abs(today - lastLogin);
-            const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+            if (lastLogin) {
+                const diffTime = Math.abs(today - lastLogin);
+                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
-            // If last login was yesterday (1 day difference roughly), increment
-            // Actually better to check if it's the same day
-            const isSameDay = today.getDate() === lastLogin.getDate() && 
-                              today.getMonth() === lastLogin.getMonth() && 
-                              today.getFullYear() === lastLogin.getFullYear();
+                // Check if it's the same day
+                const isSameDay = today.getDate() === lastLogin.getDate() && 
+                                  today.getMonth() === lastLogin.getMonth() && 
+                                  today.getFullYear() === lastLogin.getFullYear();
 
-            if (!isSameDay) {
-                // Check if it was yesterday
-                const yesterday = new Date(today);
-                yesterday.setDate(yesterday.getDate() - 1);
-                
-                const isYesterday = yesterday.getDate() === lastLogin.getDate() &&
-                                    yesterday.getMonth() === lastLogin.getMonth() &&
-                                    yesterday.getFullYear() === lastLogin.getFullYear();
-                
-                if (isYesterday) {
-                    newStreak += 1;
-                } else {
-                    newStreak = 1; // Reset if missed a day
+                if (!isSameDay) {
+                    // Check if it was yesterday
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    
+                    const isYesterday = yesterday.getDate() === lastLogin.getDate() &&
+                                        yesterday.getMonth() === lastLogin.getMonth() &&
+                                        yesterday.getFullYear() === lastLogin.getFullYear();
+                    
+                    if (isYesterday) {
+                        newStreak += 1;
+                    } else {
+                        newStreak = 1; // Reset if missed a day
+                    }
                 }
+            } else {
+                newStreak = 1; // First login ever
             }
-        } else {
-            newStreak = 1; // First login ever
-        }
 
-        user.streak = newStreak;
-        user.lastLogin = today;
-        await user.save();
+            user.streak = newStreak;
+            user.lastLogin = today;
+            await user.save();
+        } catch (error) {
+            console.error('Streak update failed:', error);
+            // Continue login anyway
+        }
 
         res.json({
             _id: user.id,
