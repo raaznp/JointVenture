@@ -30,7 +30,7 @@ jobs:
             cd server && npm install
             
             # Seed Database (Ensure Admin is updated)
-            node seeder.js
+            # node seeder.js # DISABLED: Blocking deployment if it fails. We will fix via API.
 
             # Install client dependencies and build
             cd ../client && npm install && npm run build
