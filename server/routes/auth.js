@@ -24,63 +24,62 @@ router.post('/register', async (req, res) => {
 router.post('/login', async (req, res) => {
     const { email, password } = req.body;
 
-    // Check for user email
-    const user = await User.findOne({ email });
+    try {
+        // Check for user email
+        const user = await User.findOne({ email });
 
-    if (user && (await user.matchPassword(password))) {
-        // Streak Logic - Wrapped in try/catch to prevent blocking login
-        try {
-            const today = new Date();
-            const lastLogin = user.lastLogin ? new Date(user.lastLogin) : null;
-            
-            let newStreak = user.streak || 0;
+        if (user && (await user.matchPassword(password))) {
+            // Streak Logic - Wrapped to prevent blocking
+            try {
+                const today = new Date();
+                const lastLogin = user.lastLogin ? new Date(user.lastLogin) : null;
+                
+                let newStreak = user.streak || 0;
 
-            if (lastLogin) {
-                const diffTime = Math.abs(today - lastLogin);
-                const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+                if (lastLogin) {
+                    const diffTime = Math.abs(today - lastLogin);
+                    const isSameDay = today.getDate() === lastLogin.getDate() && 
+                                      today.getMonth() === lastLogin.getMonth() && 
+                                      today.getFullYear() === lastLogin.getFullYear();
 
-                // Check if it's the same day
-                const isSameDay = today.getDate() === lastLogin.getDate() && 
-                                  today.getMonth() === lastLogin.getMonth() && 
-                                  today.getFullYear() === lastLogin.getFullYear();
-
-                if (!isSameDay) {
-                    // Check if it was yesterday
-                    const yesterday = new Date(today);
-                    yesterday.setDate(yesterday.getDate() - 1);
-                    
-                    const isYesterday = yesterday.getDate() === lastLogin.getDate() &&
-                                        yesterday.getMonth() === lastLogin.getMonth() &&
-                                        yesterday.getFullYear() === lastLogin.getFullYear();
-                    
-                    if (isYesterday) {
-                        newStreak += 1;
-                    } else {
-                        newStreak = 1; // Reset if missed a day
+                    if (!isSameDay) {
+                        const yesterday = new Date(today);
+                        yesterday.setDate(yesterday.getDate() - 1);
+                        const isYesterday = yesterday.getDate() === lastLogin.getDate() &&
+                                            yesterday.getMonth() === lastLogin.getMonth() &&
+                                            yesterday.getFullYear() === lastLogin.getFullYear();
+                        
+                        if (isYesterday) {
+                            newStreak += 1;
+                        } else {
+                            newStreak = 1;
+                        }
                     }
+                } else {
+                    newStreak = 1;
                 }
-            } else {
-                newStreak = 1; // First login ever
+
+                user.streak = newStreak;
+                user.lastLogin = today;
+                await user.save();
+            } catch (streakError) {
+                console.error('Streak update failed (non-fatal):', streakError.message);
             }
 
-            user.streak = newStreak;
-            user.lastLogin = today;
-            await user.save();
-        } catch (error) {
-            console.error('Streak update failed:', error);
-            // Continue login anyway
+            res.json({
+                _id: user.id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                streak: user.streak, // Use the actual user object streak
+                token: generateToken(user._id),
+            });
+        } else {
+            res.status(400).json({ message: 'Invalid credentials' });
         }
-
-        res.json({
-            _id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
-            streak: newStreak,
-            token: generateToken(user._id),
-        });
-    } else {
-        res.status(400).json({ message: 'Invalid credentials' });
+    } catch (error) {
+        console.error('Login Error:', error);
+        res.status(500).json({ message: 'Server error during login', error: error.message });
     }
 });
 
