@@ -106,4 +106,44 @@ router.get('/', protect, editor, (req, res) => {
     }
 });
 
+// @route DELETE /api/files
+router.delete('/', protect, editor, (req, res) => {
+    try {
+        const { path: filePath } = req.query; // Expecting url path like /uploads/files/...
+
+        if (!filePath) {
+            return res.status(400).json({ message: 'File path is required' });
+        }
+
+        // Security check: Ensure we are only deleting files within the uploads directory
+        // The filePath from frontend usually starts with / (e.g. /uploads/files/2026/01/12/file.txt)
+        // or relative (uploads/files/...)
+        
+        // Remove leading slash if present to make it relative to root
+        let cleanPath = filePath.startsWith('/') ? filePath.substring(1) : filePath;
+        
+        // Normalize path
+        const absolutePath = path.resolve(path.join(__dirname, '..', cleanPath));
+        const uploadsRoot = path.resolve(path.join(__dirname, '..', 'uploads'));
+
+        // Check if the resolved path is within the uploads directory
+        if (!absolutePath.startsWith(uploadsRoot)) {
+            return res.status(403).json({ message: 'Invalid file path' });
+        }
+
+        if (!fs.existsSync(absolutePath)) {
+            return res.status(404).json({ message: 'File not found' });
+        }
+
+        fs.unlinkSync(absolutePath);
+        console.log(`[Files] Deleted: ${absolutePath}`);
+
+        res.json({ message: 'File deleted successfully' });
+
+    } catch (error) {
+        console.error('Delete Error:', error);
+        res.status(500).json({ message: 'Error deleting file' });
+    }
+});
+
 module.exports = router;

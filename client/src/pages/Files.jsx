@@ -56,6 +56,24 @@ const Files = () => {
         }
     };
 
+    const handleDelete = async (file) => {
+        if (!window.confirm(`Are you sure you want to delete "${file.name}"?`)) {
+            return;
+        }
+
+        try {
+            await axios.delete(`/api/files?path=${encodeURIComponent(file.url)}`, {
+                headers: { Authorization: `Bearer ${token}` }
+            });
+            
+            // Remove from state immediately
+            setFiles(prev => prev.filter(f => f.url !== file.url));
+        } catch (error) {
+            console.error('Delete error:', error);
+            alert('Failed to delete file: ' + (error.response?.data?.message || 'Unknown error'));
+        }
+    };
+
     const formatSize = (bytes) => {
         if (bytes === 0) return '0 Bytes';
         const k = 1024;
@@ -129,11 +147,18 @@ const Files = () => {
                                                 target="_blank" 
                                                 rel="noreferrer"
                                                 download
-                                                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors"
+                                                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-blue-50 text-blue-600 hover:bg-blue-100 transition-colors mr-2"
                                                 title="Download"
                                             >
                                                 <Download className="w-4 h-4" />
                                             </a>
+                                            <button
+                                                onClick={() => handleDelete(file)}
+                                                className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-red-50 text-red-600 hover:bg-red-100 transition-colors"
+                                                title="Delete"
+                                            >
+                                                <Trash2 className="w-4 h-4" />
+                                            </button>
                                         </td>
                                     </tr>
                                 ))
