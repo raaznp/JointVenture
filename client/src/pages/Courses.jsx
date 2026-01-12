@@ -69,7 +69,7 @@ const Courses = () => {
                             </Link>
                             <div className="px-5 py-5 flex-1 flex flex-col">
                                 <Link to={`/dashboard/course/${course._id}`}>
-                                    <h3 className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors mb-2 line-clamp-1">{course.title}</h3>
+                                    <h3 className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors mb-2 h-7 overflow-hidden">{course.title}</h3>
                                 </Link>
 
                                 {/* Progress Bar */}
@@ -88,7 +88,7 @@ const Courses = () => {
                                     </div>
                                 </div>
 
-                                <p className="text-sm text-gray-500 line-clamp-3 mb-6 flex-1">{course.description}</p>
+                                <p className="text-sm text-gray-500 line-clamp-3 h-14 mb-6 overflow-hidden">{course.description}</p>
                                 
                                 <div className="mt-auto">
                                     {course.modules.length > 0 ? (
