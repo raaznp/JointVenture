@@ -53,16 +53,19 @@ const Courses = () => {
     return (
         <div>
             <h2 className="text-2xl font-semibold mb-4">Available Courses</h2>
-            <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 items-stretch">
                 {courses.map((course) => {
                     const progress = calculateProgress(course._id, course.modules.length);
+                    const isComplete = progress === 100;
+                    const hasModules = course.modules.length > 0;
                     
                     return (
-                        <div key={course._id} className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100">
-                            <div className="relative h-48 flex-shrink-0 bg-gray-200">
+                        <div key={course._id} className="bg-white rounded-xl shadow-sm border border-gray-200 hover:shadow-lg transition-all duration-300 flex flex-col h-full">
+                            {/* Image Header */}
+                            <div className="relative h-48 flex-shrink-0 bg-gray-100 rounded-t-xl overflow-hidden">
                                 {course.thumbnail ? (
                                     <img 
-                                        className="w-full h-full object-cover rounded-t-xl" 
+                                        className="w-full h-full object-cover" 
                                         src={course.thumbnail} 
                                         alt={course.title} 
                                     />
@@ -71,45 +74,48 @@ const Courses = () => {
                                         <span className="text-sm">No Image</span>
                                     </div>
                                 )}
-                                <div className="absolute inset-x-0 bottom-0 h-1 bg-gray-100">
+                                {/* Progress Overlay Line */}
+                                <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-gray-200">
                                     <div
-                                        className={`h-full transition-all duration-1000 ${progress === 100 ? 'bg-green-500' : 'bg-blue-600'}`}
+                                        className={`h-full ${isComplete ? 'bg-green-500' : 'bg-blue-600'}`}
                                         style={{ width: `${progress}%` }}
                                     ></div>
                                 </div>
                             </div>
                             
-                            <div className="p-5 flex-1 flex flex-col">
-                                <div className="flex justify-between items-start mb-2">
-                                    <h3 className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight flex-1 pr-2">
-                                        <Link to={`/dashboard/course/${course._id}`} className="hover:text-blue-600 transition-colors">
+                            {/* Content Body */}
+                            <div className="p-5 flex flex-col flex-1">
+                                <div className="flex justify-between items-start mb-3">
+                                    <h3 className="text-lg font-bold text-gray-900 leading-snug">
+                                        <Link to={`/dashboard/course/${course._id}`} className="hover:text-blue-600 transition-colors line-clamp-2">
                                             {course.title}
                                         </Link>
                                     </h3>
-                                    {progress === 100 && (
-                                        <span className="flex-shrink-0 px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full">
+                                    {isComplete && (
+                                        <span className="ml-2 flex-shrink-0 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                             Done
                                         </span>
                                     )}
                                 </div>
 
-                                <p className="text-sm text-gray-600 line-clamp-3 mb-6 flex-1">
+                                <p className="text-sm text-gray-600 line-clamp-4 flex-1 mb-6">
                                     {course.description}
                                 </p>
 
+                                {/* Sticky Footer Button */}
                                 <div className="mt-auto pt-4 border-t border-gray-100">
                                     <Link 
-                                        to={course.modules.length > 0 ? `/dashboard/course/${course._id}` : '#'}
-                                        onClick={(e) => course.modules.length === 0 && e.preventDefault()}
-                                        className={`block w-full text-center py-2.5 rounded-lg text-sm font-semibold transition-all shadow-sm hover:shadow ${
-                                            course.modules.length === 0 
-                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
-                                                : progress === 100 
-                                                    ? 'bg-green-600 text-white hover:bg-green-700'
-                                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                                        to={hasModules ? `/dashboard/course/${course._id}` : '#'}
+                                        onClick={(e) => !hasModules && e.preventDefault()}
+                                        className={`block w-full text-center py-2.5 rounded-lg text-sm font-semibold transition-colors shadow-sm ${
+                                            !hasModules
+                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed border border-gray-200'
+                                                : isComplete
+                                                    ? 'bg-green-600 text-white hover:bg-green-700 border border-transparent'
+                                                    : 'bg-blue-600 text-white hover:bg-blue-700 border border-transparent'
                                         }`}
                                     >
-                                        {course.modules.length === 0 ? 'Coming Soon' : progress === 100 ? 'Review Course' : progress > 0 ? 'Continue' : 'Start Course'}
+                                        {!hasModules ? 'Coming Soon' : isComplete ? 'Review Course' : progress > 0 ? 'Continue' : 'Start Course'}
                                     </Link>
                                 </div>
                             </div>
