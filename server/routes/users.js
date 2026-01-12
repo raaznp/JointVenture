@@ -75,6 +75,45 @@ router.put('/profile', protect, async (req, res) => {
 });
 
 // ==========================
+// User Progress Routes
+// ==========================
+
+// @route PUT /api/users/progress
+// @desc Update user course progress (mark module as complete)
+router.put('/progress', protect, async (req, res) => {
+    try {
+        const { courseId, moduleId } = req.body;
+        const user = await User.findById(req.user._id);
+
+        if (user) {
+            // Check if course progress entry exists
+            const courseProgressIndex = user.courseProgress.findIndex(cp => cp.courseId.toString() === courseId);
+
+            if (courseProgressIndex > -1) {
+                // Course entry exists, check if module is already completed
+                if (!user.courseProgress[courseProgressIndex].completedModules.includes(moduleId)) {
+                    user.courseProgress[courseProgressIndex].completedModules.push(moduleId);
+                }
+            } else {
+                // Create new entry
+                user.courseProgress.push({
+                    courseId: courseId,
+                    completedModules: [moduleId]
+                });
+            }
+
+            await user.save();
+            res.json(user.courseProgress);
+        } else {
+            res.status(404).json({ message: 'User not found' });
+        }
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+});
+
+// ==========================
 // Admin User Management Routes
 // ==========================
 

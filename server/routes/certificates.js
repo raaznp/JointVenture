@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const Certificate = require('../models/Certificate');
 const Course = require('../models/Course');
-const { protect } = require('../middleware/auth');
+const { protect } = require('../middleware/authMiddleware');
 
 // @route   POST /api/certificates
 // @desc    Issue a new certificate

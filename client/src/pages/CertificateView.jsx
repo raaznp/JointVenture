@@ -1,38 +1,39 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Award, Printer, CheckCircle, Share2, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
 import jvLogo from '../assets/jv-logo.png';
 import safe360Logo from '../assets/safe360-logo.png';
 
-const DUMMY_CERT_DATA = {
-    'cert_123': {
-        student: 'Admin User',
-        course: 'Warehouse Equipment Familiarisation',
-        code: 'JV-CERT-A7X92B1',
-        issueDate: 'November 15, 2025',
-        instructor: 'Sarah Jenkins',
-        instructorRole: 'Lead Safety Trainer'
-    },
-    'cert_124': {
-        student: 'Admin User',
-        course: 'Safety Protocols 101',
-        code: 'JV-CERT-B8Y22C4',
-        issueDate: 'October 20, 2025',
-        instructor: 'Mike Ross',
-        instructorRole: 'Operations Director'
-    }
-};
-
 const CertificateView = () => {
     const { id } = useParams();
-    // In a real app, fetch by ID. Here we mock it.
-    // If ID is not in dummy, fallback to first one just for demo stability
-    const cert = DUMMY_CERT_DATA[id] || DUMMY_CERT_DATA['cert_123'];
+    const [cert, setCert] = useState(null);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchCertificate = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                const { data } = await axios.get(`/api/certificates/${id}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                });
+                setCert(data);
+            } catch (error) {
+                console.error("Failed to fetch certificate", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchCertificate();
+    }, [id]);
 
     const handlePrint = () => {
         window.print();
     };
+
+    if (loading) return <div className="min-h-screen flex items-center justify-center">Loading certificate...</div>;
+    if (!cert) return <div className="min-h-screen flex items-center justify-center">Certificate not found</div>;
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4 print:bg-white print:p-0">
@@ -56,16 +57,10 @@ const CertificateView = () => {
             </div>
 
             {/* Certificate Container */}
-            {/* Certificate Container */}
             <div className="bg-white w-full max-w-4xl p-10 md:p-16 rounded-xl shadow-2xl relative overflow-hidden print:shadow-none print:w-full print:h-screen print:rounded-none border-[20px] border-double border-gray-100">
                 
                 {/* Inner Border */}
                 <div className="absolute inset-4 border border-gray-300 pointer-events-none"></div>
-
-                {/* Watermark/Background decoration - Removed as per request */}
-                <div className="absolute inset-0 flex items-center justify-center opacity-[0.03] pointer-events-none">
-                     {/* Icon removed */}
-                </div>
 
                 {/* Header */}
                 <div className="text-center relative z-10">
@@ -86,23 +81,23 @@ const CertificateView = () => {
                     <p className="text-lg text-gray-500 mb-8 font-serif italic">This is to certify that</p>
                     
                     <div className="text-4xl md:text-6xl font-bold text-gray-900 mb-8 font-serif py-4 px-8 inline-block relative">
-                        {cert.student}
+                        {cert.user?.fullName || 'Student Name'}
                          <div className="absolute bottom-0 left-0 w-full h-px bg-gray-300"></div>
                     </div>
 
                     <p className="text-lg text-gray-500 mb-8 font-serif italic">has successfully completed the course</p>
 
                     <div className="text-2xl md:text-4xl font-bold text-blue-800 mb-16 font-serif max-w-2xl mx-auto leading-tight">
-                        {cert.course}
+                        {cert.course?.title}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-12 items-end mt-12 px-8">
                         <div className="text-center">
                             <div className="mb-3 font-signature text-3xl text-gray-800" style={{fontFamily: 'cursive'}}>
-                                {cert.instructor}
+                                Sarah Jenkins
                             </div>
                             <div className="h-px w-full bg-gray-300 mb-2"></div>
-                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">{cert.instructorRole}</p>
+                            <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Lead Safety Trainer</p>
                         </div>
 
                          <div className="flex flex-col items-center justify-center -order-1 md:order-none mb-8 md:mb-0">
@@ -115,7 +110,7 @@ const CertificateView = () => {
 
                         <div className="text-center">
                              <div className="mb-3 font-serif text-xl text-gray-800">
-                                {cert.issueDate}
+                                {new Date(cert.issueDate).toLocaleDateString()}
                             </div>
                             <div className="h-px w-full bg-gray-300 mb-2"></div>
                             <p className="text-xs font-bold text-gray-400 uppercase tracking-widest">Date Issued</p>

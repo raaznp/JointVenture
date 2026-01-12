@@ -29,42 +29,38 @@ router.post('/login', async (req, res) => {
         const user = await User.findOne({ email });
 
         if (user && (await user.matchPassword(password))) {
-            // Streak Logic - Wrapped to prevent blocking
-            try {
-                const today = new Date();
-                const lastLogin = user.lastLogin ? new Date(user.lastLogin) : null;
-                
-                let newStreak = user.streak || 0;
+            // Streak Logic
+            const today = new Date();
+            const lastLogin = user.lastLogin ? new Date(user.lastLogin) : null;
+            
+            let newStreak = user.streak || 0;
 
-                if (lastLogin) {
-                    const diffTime = Math.abs(today - lastLogin);
-                    const isSameDay = today.getDate() === lastLogin.getDate() && 
-                                      today.getMonth() === lastLogin.getMonth() && 
-                                      today.getFullYear() === lastLogin.getFullYear();
+            if (lastLogin) {
+                const diffTime = Math.abs(today - lastLogin);
+                const isSameDay = today.getDate() === lastLogin.getDate() && 
+                                  today.getMonth() === lastLogin.getMonth() && 
+                                  today.getFullYear() === lastLogin.getFullYear();
 
-                    if (!isSameDay) {
-                        const yesterday = new Date(today);
-                        yesterday.setDate(yesterday.getDate() - 1);
-                        const isYesterday = yesterday.getDate() === lastLogin.getDate() &&
-                                            yesterday.getMonth() === lastLogin.getMonth() &&
-                                            yesterday.getFullYear() === lastLogin.getFullYear();
-                        
-                        if (isYesterday) {
-                            newStreak += 1;
-                        } else {
-                            newStreak = 1;
-                        }
+                if (!isSameDay) {
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+                    const isYesterday = yesterday.getDate() === lastLogin.getDate() &&
+                                        yesterday.getMonth() === lastLogin.getMonth() &&
+                                        yesterday.getFullYear() === lastLogin.getFullYear();
+                    
+                    if (isYesterday) {
+                        newStreak += 1;
+                    } else {
+                        newStreak = 1;
                     }
-                } else {
-                    newStreak = 1;
                 }
-
-                user.streak = newStreak;
-                user.lastLogin = today;
-                await user.save();
-            } catch (streakError) {
-                console.error('Streak update failed (non-fatal):', streakError.message);
+            } else {
+                newStreak = 1;
             }
+
+            user.streak = newStreak;
+            user.lastLogin = today;
+            await user.save();
 
             res.json({
                 _id: user.id,

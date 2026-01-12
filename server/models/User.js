@@ -51,6 +51,12 @@ const userSchema = new mongoose.Schema({
         location: { type: String },
         duration: { type: String },
         description: { type: String }
+    }],
+
+    // Course Progress Tracking
+    courseProgress: [{
+        courseId: { type: mongoose.Schema.Types.ObjectId, ref: 'Course' },
+        completedModules: [{ type: String }] // Storing Module IDs
     }]
 }, {
     timestamps: true,

@@ -162,129 +162,130 @@ const seedData = async () => {
                 modules: [
                     {
                         title: 'Entrance & Security Checkpoint',
-                        description: 'Familiarize yourself with the security protocols at the facility entrance.',
+                        description: 'Mandatory entry point for all personnel. Security protocols strictly enforced.',
                         type: '360',
-                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/leadenhall_market_02.jpg', // Placeholder for entrance
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/parking_garage.jpg', // "Parking Garage" is the correct filename
                         isLocked: false,
                         hotspots: [
-                            { pitch: -5, yaw: 180, text: 'ID Badge Reader', type: 'info' },
-                            { pitch: 0, yaw: 0, text: 'Visitor Logbook', type: 'info' },
-                            { pitch: 10, yaw: 90, text: 'PPE Signage', type: 'info' }
+                            { pitch: -5, yaw: 180, text: 'ID Badge Scanner (Required for Entry)', type: 'info' },
+                            { pitch: 0, yaw: 0, text: 'Visitor Logbook Station', type: 'info' },
+                            { pitch: 10, yaw: 90, text: 'Mandatory PPE Signage', type: 'info' }
                         ]
                     },
                     {
                         title: 'Main Loading Dock',
-                        description: 'Operations at the main loading dock.',
+                        description: 'Primary shipping and receiving zone. High traffic area.',
                         type: '360',
                         content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/empty_warehouse_01.jpg',
                         isLocked: false,
                         hotspots: [
-                            { pitch: -10, yaw: 0, text: 'Dock Leveler', type: 'info' },
-                            { pitch: -15, yaw: 45, text: 'Wheel Chocks (Safety)', type: 'info' },
-                            { pitch: 20, yaw: 0, text: 'Overhead Door Controls', type: 'info' }
+                            { pitch: -10, yaw: 0, text: 'Dock Leveler Controls', type: 'info' },
+                            { pitch: -15, yaw: 45, text: 'Wheel Chocks (Must be applied before loading)', type: 'info' },
+                            { pitch: 20, yaw: 0, text: 'Overhead Door Controls (Next to Door)', type: 'info' }
                         ]
                     },
                      {
                         title: 'Forklift Charging Station',
-                        description: 'Battery maintenance and safety.',
+                        description: 'Designated area for recharging electric material handling equipment.',
                         type: '360',
-                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/aircraft_workshop_01.jpg', // Industrial workshop vibe
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/machine_shop_02.jpg',
+
                         isLocked: false,
                         hotspots: [
-                            { pitch: 0, yaw: 180, text: 'Battery Charger', type: 'info' },
-                            { pitch: 5, yaw: 90, text: 'Eye Wash Station', type: 'info' },
-                            { pitch: -10, yaw: -45, text: 'Acid Spill Kit', type: 'info' }
+                            { pitch: 0, yaw: 180, text: 'Battery Charger Unit (Turn off before connecting)', type: 'info' },
+                            { pitch: 5, yaw: 90, text: 'Emergency Eye Wash Station', type: 'info' },
+                            { pitch: -10, yaw: -45, text: 'Acid Spill Response Kit', type: 'info' }
                         ]
                     },
                     {
                         title: 'High-Bay Storage Aisles',
-                        description: 'Navigation and stacking rules in high-bay areas.',
+                        description: 'Dense storage area. Pedestrians must use mirrors at intersections.',
                         type: '360',
-                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/empty_warehouse_01.jpg', // Reusing warehouse
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/empty_warehouse_01.jpg',
                         isLocked: false,
                         hotspots: [
-                            { pitch: 15, yaw: 0, text: 'Rack Load Labels', type: 'info' },
-                            { pitch: 0, yaw: 180, text: 'Aisle Mirrors', type: 'info' },
+                            { pitch: 15, yaw: 0, text: 'Rack Load Capacity Labels', type: 'info' },
+                            { pitch: 0, yaw: 180, text: 'Aisle Mirrors (Check before crossing)', type: 'info' },
                             { pitch: -5, yaw: 45, text: 'Pallet Stacking Limits', type: 'info' }
                         ]
                     },
                     {
                         title: 'Packing & Sortation Area',
-                        description: 'Conveyor belts and manual packing stations.',
+                        description: 'Final prep for outbound shipments. ergonomic mats provided.',
                         type: '360',
-                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/production_hall_01.jpg',
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/autoshop_01.jpg', // Verified filename "autoshop_01"
                         isLocked: false,
                         hotspots: [
-                            { pitch: 0, yaw: 0, text: 'Emergency Stop Button', type: 'info' },
-                            { pitch: -10, yaw: 90, text: 'Barcode Scanner', type: 'info' },
-                            { pitch: -15, yaw: 180, text: 'Anti-Fatigue Mat', type: 'info' }
+                            { pitch: 0, yaw: 0, text: 'Emergency Stop Button (Halts Conveyor)', type: 'info' },
+                            { pitch: -10, yaw: 90, text: 'Barcode Scanner (Track Goods)', type: 'info' },
+                            { pitch: -15, yaw: 180, text: 'Anti-Fatigue Mat (Stand here)', type: 'info' }
                         ]
                     },
                     {
                         title: 'Cold Storage / Freezer',
-                        description: 'Operations in temperature-controlled zones.',
+                        description: 'Temperature sensitive zone. Thermal curtains must remain closed.',
                         type: '360',
-                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/carpentry_shop_01.jpg', // Placeholder for cold room
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/carpentry_shop_01.jpg',
                         isLocked: false,
                         hotspots: [
-                            { pitch: 10, yaw: 0, text: 'Temperature Gauge', type: 'info' },
-                            { pitch: 20, yaw: 180, text: 'Thermal Curtain', type: 'info' },
+                            { pitch: 10, yaw: 0, text: 'Temperature Gauge (Monitor Hourly)', type: 'info' },
+                            { pitch: 20, yaw: 180, text: 'Thermal Curtain (Keep Closed)', type: 'info' },
                             { pitch: -10, yaw: 45, text: 'Ice Buildup Check', type: 'info' }
                         ]
                     },
                     {
                         title: 'Hazardous Materials Cage',
-                        description: 'Restricted storage for chemicals and flammables.',
+                        description: 'Secure storage for flammable and corrosive materials.',
                         type: '360',
                         content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/large_corridor.jpg',
                         isLocked: false,
                         hotspots: [
-                            { pitch: 5, yaw: 0, text: 'NFPA Diamond Placard', type: 'info' },
+                            { pitch: 5, yaw: 0, text: 'NFPA Diamond Placard (Hazard ID)', type: 'info' },
                             { pitch: 25, yaw: 0, text: 'Ventilation Intake', type: 'info' },
                             { pitch: 0, yaw: 180, text: 'Locked Access Gate', type: 'info' }
                         ]
                     },
                     {
                         title: 'Maintenance Workshop',
-                        description: 'Tools, repairs, and lockout/tagout procedures.',
+                        description: 'Repair zone. Lockout/Tagout procedures apply to all machinery.',
                         type: '360',
                         content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/machine_shop_01.jpg',
                         isLocked: false,
                         hotspots: [
                             { pitch: 0, yaw: 0, text: 'Lockout/Tagout Station', type: 'info' },
                             { pitch: -5, yaw: 90, text: 'Grinder Guard', type: 'info' },
-                            { pitch: -10, yaw: -90, text: 'Fire Extinguisher', type: 'info' }
+                            { pitch: -10, yaw: -90, text: 'Fire Extinguisher (Class B/C)', type: 'info' }
                         ]
                     },
                     {
                         title: 'Admin & Dispatch Office',
-                        description: 'Inventory management and communication hub.',
+                        description: 'Coordination center. Emergency communication hub.',
                         type: '360',
-                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/autoshop_01.jpg', // Office/Shop vibe
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/autoshop_01.jpg', // Reusing autoshop for now as it looks industrial enough
                         isLocked: false,
                         hotspots: [
-                            { pitch: 0, yaw: 0, text: 'Radio Dispatch', type: 'info' },
+                            { pitch: 0, yaw: 0, text: 'Radio Dispatch Desk', type: 'info' },
                             { pitch: -5, yaw: 180, text: 'Inventory Terminal', type: 'info' },
                             { pitch: 10, yaw: 90, text: 'Evacuation Map', type: 'info' }
                         ]
                     },
                     {
                         title: 'Waste Management Zone',
-                        description: 'Recycling, compaction, and biohazard disposal.',
+                        description: 'Disposal area. Separate balers for cardboard and plastic.',
                         type: '360',
-                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/factory_1k.jpg', // Placeholder
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/construction_yard.jpg', // "construction_yard" is correct
                         isLocked: false,
                         hotspots: [
-                            { pitch: 0, yaw: 0, text: 'Cardboard Baler', type: 'info' },
+                            { pitch: 0, yaw: 0, text: 'Cardboard Baler (Only Cardboard)', type: 'info' },
                             { pitch: -10, yaw: 90, text: 'Color-Coded Bins', type: 'info' },
                             { pitch: -5, yaw: 180, text: 'Biohazard Disposal', type: 'info' }
                         ]
                     },
                     {
                         title: 'Emergency Assembly Point',
-                        description: 'Outdoor assembly area procedures.',
+                        description: 'Designated Muster Point for all staff during evacuations.',
                         type: '360',
-                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/syferfontein_06_puresky.jpg', // Outdoor field
+                        content: 'https://dl.polyhaven.org/file/ph-assets/HDRIs/extra/Tonemapped%20JPG/driving_school.jpg', // "driving_school" is correct
                         isLocked: false,
                         hotspots: [
                             { pitch: 0, yaw: 0, text: 'Muster Point Sign', type: 'info' },
@@ -292,6 +293,7 @@ const seedData = async () => {
                             { pitch: 0, yaw: -45, text: 'Headcount Clipboard', type: 'info' }
                         ]
                     },
+
                     {
                         title: 'Final Certification Exam',
                         description: 'Comprehensive assessment covering all warehouse zones.',

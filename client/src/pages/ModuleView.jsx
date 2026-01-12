@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Pannellum } from 'pannellum-react';
-import { ChevronLeft, ChevronRight, Menu, X, CheckCircle, Lock, Info } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Menu, X, CheckCircle, Info } from 'lucide-react';
 
 const ModuleView = () => {
     const { courseId, moduleId } = useParams();
@@ -18,31 +18,70 @@ const ModuleView = () => {
     const [quizSubmitted, setQuizSubmitted] = useState(false);
     const [score, setScore] = useState(0);
     const [showResult, setShowResult] = useState(false);
+    
+    // Progress State
+    const [completedModules, setCompletedModules] = useState([]);
 
     useEffect(() => {
         const fetchCourseAndModule = async () => {
             const token = localStorage.getItem('token');
             const config = {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` },
             };
             try {
-                // Fetch course to get all modules
+                // 1. Fetch Course Data
                 const { data } = await axios.get(`/api/courses/${courseId}`, config);
                 setCourse(data);
                 
                 const foundModule = data.modules.find(m => m._id === moduleId);
                 setModule(foundModule);
+
+                // 2. Load Progress (Resilient Strategy)
+                // A. LocalStorage (Immediate)
+                const localKey = `course_progress_${courseId}`;
+                let localData = [];
+                try {
+                    localData = JSON.parse(localStorage.getItem(localKey) || '[]');
+                } catch (e) { console.error("Local storage parse error", e); }
                 
-                // Reset quiz state when module changes
+                // B. Server (Async)
+                let serverCompletedIds = [];
+                try {
+                    const userRes = await axios.get('/api/users/profile', config);
+                    const userProgress = userRes.data.courseProgress?.find(cp => String(cp.courseId) === String(courseId));
+                    if (userProgress) {
+                        serverCompletedIds = userProgress.completedModules.map(id => String(id));
+                    }
+                } catch (e) {
+                    console.warn("Profile fetch failed - falling back to local only", e);
+                }
+
+                // C. Merge & Update
+                const currentModIdString = String(foundModule._id);
+                // Unique set
+                const mergedIds = [...new Set([...localData, ...serverCompletedIds])];
+                // Add current module
+                const finalIds = mergedIds.includes(currentModIdString) ? mergedIds : [...mergedIds, currentModIdString];
+                
+                // D. Sync Back
+                setCompletedModules(finalIds);  // Update UI immediately
+                
+                // Update Local
+                localStorage.setItem(localKey, JSON.stringify(finalIds));
+
+                // Update Server (Fire & Forget)
+                if (!serverCompletedIds.includes(currentModIdString)) {
+                    axios.put('/api/users/progress', { courseId, moduleId: foundModule._id }, config).catch(e => console.error("Progress save failed", e));
+                }
+
+                // Reset quiz state
                 setCurrentQuestionIndex(0);
                 setShowResult(false);
                 setAnswers({});
                 setQuizSubmitted(false);
 
             } catch (error) {
-                console.error(error);
+                console.error("Critical Module Load Error", error);
             } finally {
                 setLoading(false);
             }
@@ -90,7 +129,6 @@ const ModuleView = () => {
                         { courseId: course._id },
                         { headers: { Authorization: `Bearer ${token}` } }
                     );
-                    // Could add a toast here, but the UI link appearing acts as confirmation
                 }
             } catch (error) {
                 console.error("Certificate generation failed", error);
@@ -115,7 +153,7 @@ const ModuleView = () => {
     if (!module || !course) return <div>Module not found</div>;
 
     const currentIndex = getCurrentModuleIndex();
-    const progress = Math.round(((currentIndex + 1) / course.modules.length) * 100);
+    const progress = Math.round((completedModules.length / course.modules.length) * 100);
     const isFirstModule = currentIndex === 0;
     const isLastModule = currentIndex === course.modules.length - 1;
 
@@ -358,17 +396,18 @@ const ModuleView = () => {
                 <div className="flex-1 overflow-y-auto">
                     {course.modules.map((m, index) => {
                         const isActive = m._id === module._id;
-                        const isCompleted = index < currentIndex; // Simple logic: everything before current is done
+                        // FIX: Ensure ID comparison is robust
+                        const isCompleted = completedModules.includes(String(m._id));
                         
                         return (
                             <button
                                 key={m._id}
                                 onClick={() => goToModule(index)}
-                                className={`w-full text-left p-4 border-b border-gray-100 hover:bg-gray-50 transition-colors flex items-start gap-3 ${
+                                className={`w-full text-left p-3 border-b border-gray-100 hover:bg-gray-50 transition-colors flex items-start gap-3 ${
                                     isActive ? 'bg-blue-50 border-l-4 border-l-blue-600' : ''
                                 }`}
                             >
-                                <div className={`mt-0.5 ${
+                                <div className={`mt-2 ${
                                     isActive ? 'text-blue-600' : isCompleted ? 'text-green-500' : 'text-gray-400'
                                 }`}>
                                     {isCompleted ? (
@@ -381,8 +420,20 @@ const ModuleView = () => {
                                         </div>
                                     )}
                                 </div>
-                                <div>
-                                    <p className={`text-sm font-medium ${isActive ? 'text-blue-900' : 'text-gray-700'}`}>
+                                
+                                {/* Thumbnail */}
+                                <div className="flex-shrink-0 w-16 h-12 bg-gray-200 rounded overflow-hidden mt-0.5">
+                                    {m.type === '360' ? (
+                                        <img src={m.content} alt="" className="w-full h-full object-cover" />
+                                    ) : (
+                                        <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                            <span className="text-xs font-medium uppercase">{m.type.slice(0, 3)}</span>
+                                        </div>
+                                    )}
+                                </div>
+
+                                <div className="min-w-0">
+                                    <p className={`text-sm font-medium truncate ${isActive ? 'text-blue-900' : 'text-gray-700'}`}>
                                         {m.title}
                                     </p>
                                     <span className="text-xs text-gray-500 capitalize">{m.type}</span>
