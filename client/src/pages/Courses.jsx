@@ -58,53 +58,59 @@ const Courses = () => {
                     const progress = calculateProgress(course._id, course.modules.length);
                     
                     return (
-                        <div key={course._id} className="bg-white overflow-hidden shadow-lg rounded-xl hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
-                            <Link to={`/dashboard/course/${course._id}`} className="block relative group overflow-hidden h-48 flex-shrink-0">
-                                <img 
-                                    className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" 
-                                    src={course.thumbnail} 
-                                    alt={course.title} 
-                                />
-                                <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
-                            </Link>
-                            <div className="px-5 py-5 flex-1 flex flex-col">
-                                <Link to={`/dashboard/course/${course._id}`}>
-                                    <h3 className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors mb-2 h-7 overflow-hidden">{course.title}</h3>
-                                </Link>
-
-                                {/* Progress Bar */}
-                                <div className="mt-3 mb-4">
-                                    <div className="flex justify-between mb-1.5">
-                                        <span className="text-xs font-semibold text-gray-500 uppercase tracking-wide">Progress</span>
-                                        <span className={`text-xs font-bold ${progress === 100 ? 'text-green-600' : 'text-blue-600'}`}>{progress}%</span>
+                        <div key={course._id} className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 flex flex-col h-full border border-gray-100">
+                            <div className="relative h-48 flex-shrink-0 bg-gray-200">
+                                {course.thumbnail ? (
+                                    <img 
+                                        className="w-full h-full object-cover rounded-t-xl" 
+                                        src={course.thumbnail} 
+                                        alt={course.title} 
+                                    />
+                                ) : (
+                                    <div className="w-full h-full flex items-center justify-center text-gray-400">
+                                        <span className="text-sm">No Image</span>
                                     </div>
-                                    <div className="w-full bg-gray-100 rounded-full h-2">
-                                        <div
-                                            className={`h-2 rounded-full transition-all duration-1000 ease-out ${
-                                                progress === 100 ? 'bg-green-500' : 'bg-blue-600'
-                                            }`}
-                                            style={{ width: `${progress}%` }}
-                                        ></div>
-                                    </div>
+                                )}
+                                <div className="absolute inset-x-0 bottom-0 h-1 bg-gray-100">
+                                    <div
+                                        className={`h-full transition-all duration-1000 ${progress === 100 ? 'bg-green-500' : 'bg-blue-600'}`}
+                                        style={{ width: `${progress}%` }}
+                                    ></div>
+                                </div>
+                            </div>
+                            
+                            <div className="p-5 flex-1 flex flex-col">
+                                <div className="flex justify-between items-start mb-2">
+                                    <h3 className="text-lg font-bold text-gray-900 line-clamp-2 leading-tight flex-1 pr-2">
+                                        <Link to={`/dashboard/course/${course._id}`} className="hover:text-blue-600 transition-colors">
+                                            {course.title}
+                                        </Link>
+                                    </h3>
+                                    {progress === 100 && (
+                                        <span className="flex-shrink-0 px-2 py-1 bg-green-100 text-green-800 text-xs font-bold rounded-full">
+                                            Done
+                                        </span>
+                                    )}
                                 </div>
 
-                                <p className="text-sm text-gray-500 line-clamp-3 h-14 mb-6 overflow-hidden">{course.description}</p>
-                                
-                                <div className="mt-auto">
-                                    {course.modules.length > 0 ? (
-                                        <Link 
-                                            to={`/dashboard/course/${course._id}`} 
-                                            className={`block w-full text-center py-2.5 rounded-lg text-sm font-semibold transition-colors ${
-                                                progress === 100 
-                                                    ? 'bg-green-50 text-green-700 hover:bg-green-100 border border-green-200'
-                                                    : 'bg-blue-50 text-blue-700 hover:bg-blue-100 border border-blue-200'
-                                            }`}
-                                        >
-                                            {progress === 100 ? 'Review Course' : progress > 0 ? 'Continue Course' : 'Start Course'}
-                                        </Link>
-                                    ) : (
-                                        <span className="block w-full text-center py-2.5 bg-gray-50 text-gray-400 rounded-lg text-sm font-medium border border-gray-200 cursor-not-allowed">Coming Soon</span>
-                                    )}
+                                <p className="text-sm text-gray-600 line-clamp-3 mb-6 flex-1">
+                                    {course.description}
+                                </p>
+
+                                <div className="mt-auto pt-4 border-t border-gray-100">
+                                    <Link 
+                                        to={course.modules.length > 0 ? `/dashboard/course/${course._id}` : '#'}
+                                        onClick={(e) => course.modules.length === 0 && e.preventDefault()}
+                                        className={`block w-full text-center py-2.5 rounded-lg text-sm font-semibold transition-all shadow-sm hover:shadow ${
+                                            course.modules.length === 0 
+                                                ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                                                : progress === 100 
+                                                    ? 'bg-green-600 text-white hover:bg-green-700'
+                                                    : 'bg-blue-600 text-white hover:bg-blue-700'
+                                        }`}
+                                    >
+                                        {course.modules.length === 0 ? 'Coming Soon' : progress === 100 ? 'Review Course' : progress > 0 ? 'Continue' : 'Start Course'}
+                                    </Link>
                                 </div>
                             </div>
                         </div>
