@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { Search, Filter, MessageSquare, CheckCircle, Clock, AlertCircle } from 'lucide-react';
 
 const DUMMY_TICKETS = [
@@ -10,6 +11,9 @@ const DUMMY_TICKETS = [
 ];
 
 const SupportManagement = () => {
+    useEffect(() => {
+        document.title = 'Support Tickets | Joint Venture Logistics';
+    }, []);
     const [tickets, setTickets] = useState(DUMMY_TICKETS);
     const [filter, setFilter] = useState('All');
 

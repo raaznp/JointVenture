@@ -9,6 +9,7 @@ const Courses = () => {
     const [userProgress, setUserProgress] = useState([]);
 
     useEffect(() => {
+        document.title = 'Courses | Joint Venture Logistics';
         const fetchData = async () => {
             const token = localStorage.getItem('token');
             const config = { headers: { Authorization: `Bearer ${token}` } };
@@ -57,8 +58,8 @@ const Courses = () => {
                     const progress = calculateProgress(course._id, course.modules.length);
                     
                     return (
-                        <div key={course._id} className="bg-white overflow-hidden shadow-lg rounded-xl hover:shadow-xl transition-shadow duration-300">
-                            <Link to={`/dashboard/course/${course._id}`} className="block relative group overflow-hidden h-48">
+                        <div key={course._id} className="bg-white overflow-hidden shadow-lg rounded-xl hover:shadow-xl transition-shadow duration-300 flex flex-col h-full">
+                            <Link to={`/dashboard/course/${course._id}`} className="block relative group overflow-hidden h-48 flex-shrink-0">
                                 <img 
                                     className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" 
                                     src={course.thumbnail} 
@@ -66,7 +67,7 @@ const Courses = () => {
                                 />
                                 <div className="absolute inset-0 bg-black/10 group-hover:bg-black/0 transition-colors"></div>
                             </Link>
-                            <div className="px-5 py-5">
+                            <div className="px-5 py-5 flex-1 flex flex-col">
                                 <Link to={`/dashboard/course/${course._id}`}>
                                     <h3 className="text-lg font-bold text-gray-900 hover:text-blue-600 transition-colors mb-2 line-clamp-1">{course.title}</h3>
                                 </Link>
@@ -87,9 +88,9 @@ const Courses = () => {
                                     </div>
                                 </div>
 
-                                <p className="text-sm text-gray-500 line-clamp-2 h-10 mb-4">{course.description}</p>
+                                <p className="text-sm text-gray-500 line-clamp-3 mb-6 flex-1">{course.description}</p>
                                 
-                                <div>
+                                <div className="mt-auto">
                                     {course.modules.length > 0 ? (
                                         <Link 
                                             to={`/dashboard/course/${course._id}`} 

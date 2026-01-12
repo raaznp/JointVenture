@@ -8,6 +8,7 @@ const Certifications = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        document.title = 'My Certifications | Joint Venture Logistics';
         const fetchCertificates = async () => {
             try {
                 const token = localStorage.getItem('token');

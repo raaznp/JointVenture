@@ -1,7 +1,11 @@
-import React, { useState } from 'react';
-import { HelpCircle, Send, FileText, AlertCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import { Send, AlertCircle, CheckCircle } from 'lucide-react';
 
 const SupportRequest = () => {
+    useEffect(() => {
+        document.title = 'Support | Joint Venture Logistics';
+    }, []);
     const [formData, setFormData] = useState({
         subject: '',
         priority: 'Normal',
